@@ -1,7 +1,13 @@
-export default OutputView = {
+import { MissionUtils } from "@woowacourse/mission-utils";
+
+const OutputView = {
+    printError(errorMessage) {
+        MissionUtils.Console.print(errorMessage);
+    },
     printMenu() {
-        Console.print("<주문 메뉴>");
+        MissionUtils.Console.print("<주문 메뉴>");
         // ...
     }
     // ...
 }
+export default OutputView
