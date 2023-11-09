@@ -39,9 +39,9 @@ const Check = {
         "[ERROR] 최대 20개까지만 주문할 수 있습니다. 다시 입력해 주세요."
       );
   },
-  async checkDuplication(tmp, orderedMenu) {
+  async checkDuplication(menuItems, orderedMenu) {
     // 중복 검증
-    if (tmp in orderedMenu)
+    if (menuItems.length !== orderedMenu.length)
       throw new Error("[ERROR] 유효하지 않은 주문입니다. 다시 입력해 주세요.");
   },
   async checkOnlyBeverages(orderedMenu) {
@@ -61,12 +61,12 @@ const Check = {
       await Promise.all(
         menuItems.map(async (tmp) => {
           const tmptmp = tmp.split("-");
-          await this.checkNameOfMenu(tmptmp[0]); // 메뉴명 올바른가
-          await this.checkDuplication(tmptmp[0], orderedMenu); // 메뉴 중복없는가
+          await this.checkNameOfMenu(tmptmp[0]); // 메뉴명 올바른가          
           await this.checkNumberOfMenu(tmptmp[1]); // 메뉴 개수 올바른가
           orderedMenu[tmptmp[0]] = Number(tmptmp[1]);
         })
       );
+      await this.checkDuplication(menuItems, orderedMenu); // 메뉴 중복없는가
       await this.checkTotalQuantity(orderedMenu); //총 20개 이하인가
       await this.checkOnlyBeverages(orderedMenu); //음료만 시키지 않았는가
       return orderedMenu;

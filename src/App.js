@@ -33,7 +33,7 @@ class App {
     OutputView.printStartMsg();
     this.#date = await this.saveDate();
     this.#orderedMenu = await this.saveMenu();
-    // console.log(this.#orderedMenu);
+    console.log(this.#orderedMenu);
     OutputView.printPreviewMsg(this.#date);
   }
 }
