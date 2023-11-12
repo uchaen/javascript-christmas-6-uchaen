@@ -71,7 +71,7 @@ class App {
   }
   async calculateBenefit(date, orderedMenu, gift) {
     let benefit = {};
-    if (date <= 25) benefit["크리스마스 이벤트 할인"] = 1000 + 100 * (date - 1);
+    if (date <= 25) benefit["크리스마스 디데이 할인"] = 1000 + 100 * (date - 1);
     if (date % 7 > 2) {
       const weekdayDiscount = await this.#calculateWeekdayDiscount(orderedMenu);
       if (weekdayDiscount > 0) benefit["평일 할인"] = weekdayDiscount;

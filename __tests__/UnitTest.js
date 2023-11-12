@@ -124,6 +124,51 @@ describe("Check.js 유닛 테스트", () => {
 
 describe("App.js 유닛 테스트", () => {
   const app = new App();
+  const orderedMenu = [
+    { category: "desserts", name: "초코케이크", count: 2 },
+    { category: "mainDishes", name: "티본스테이크", count: 1 },
+    { category: "mainDishes", name: "바비큐립", count: 1 },
+    { category: "beverages", name: "제로콜라", count: 1 },
+  ];
+  const gift = [{ category: "beverages", name: "샴페인", count: 1 }];
+  const benefit = {
+    "크리스마스 디데이 할인": 1200,
+    "평일 할인": 4046,
+    "특별 할인": 1000,
+    "증정 이벤트": 25000,
+  };
+
+  test("calculateTotalOrderAmount 계산한 총주문금액이 올바른가", async () => {
+    const result = await app.calculateTotalOrderAmount(orderedMenu);
+    expect(result).toEqual(142000);
+  });
+  test("calculateGift 계산한 증정메뉴가 올바른가", async () => {
+    const result = await app.calculateGift(142000);
+    expect(result).toEqual(gift);
+  });
+  test("calculateBenefit 계산한 혜택내역이 올바른가", async () => {
+    const result = await app.calculateBenefit(3, orderedMenu, gift);
+    expect(result).toEqual(benefit);
+  });
+  test("calculateTotalBenefitAmount 계산한 총혜택금액이 올바른가", async () => {
+    const result = await app.calculateTotalBenefitAmount(benefit);
+    expect(result).toEqual(31246);
+  });
+  test("calculateEstimatedPaymentAmount 계산한 할인 후 예상 결제 금액이 올바른가", async () => {
+    const result = await app.calculateEstimatedPaymentAmount(142000, benefit);
+    expect(result).toEqual(135754);
+  });
+  test.each([
+    [20000, "산타"],
+    [19999, "트리"],
+    [10000, "트리"],
+    [9999, "별"],
+    [5000, "별"],
+    [4999, "없음"],
+  ])("calculateDecemberEventBadge 계산한 12월 이벤트 배지가 올바른가", async (totalBenefitAmount, expectedBadge) => {
+    const result = await app.calculateDecemberEventBadge(totalBenefitAmount);
+    expect(result).toBe(expectedBadge);
+  });
 });
 
 describe("CheckOfferingMenu.js 유닛 테스트", () => {
