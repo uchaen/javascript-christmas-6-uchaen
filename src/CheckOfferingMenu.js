@@ -1,7 +1,7 @@
 import OfferingMenu from "./OfferingMenu.js";
 
 const CheckOfferingMenu = {
-  async IsNotExistMenu(menuName) {
+  async IsNotExistMenu(menuName) { 
     for (const category in OfferingMenu) {
       for (const item of OfferingMenu[category]) {
         if (item.name === menuName) return false; // 찾으면 종료

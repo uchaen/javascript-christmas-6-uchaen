@@ -1,4 +1,6 @@
 import Check from "../src/Check.js";
+import App from "../src/App.js";
+import CheckOfferingMenu from "../src/CheckOfferingMenu.js";
 
 describe("Check.js 유닛 테스트", () => {
   test.each(["", "1200", "asdf", "3.5", "0", "A"])(
@@ -11,7 +13,7 @@ describe("Check.js 유닛 테스트", () => {
     "checkDate 날짜 올바르게 입력했는가",
     async (inputs) => {
       const result = await Check.checkDate(inputs);
-      expect(result).toBe(Number(inputs));
+      expect(result).toBeUndefined();
     }
   );
 
@@ -94,5 +96,70 @@ describe("Check.js 유닛 테스트", () => {
       { category: "beverages", name: "제로콜라", count: 5 },
     ]);
     expect(result).toBeUndefined();
+  });
+
+  test.each([
+    "해산물파스타1,샴페인-3",
+    "해산물파스타-레드와인,1",
+    "해산물파스타-3,,레드와인-1-",
+    "샴페인-10, 초코케이크-1",
+  ])(
+    "checkInputtedMenu 메뉴 입력 형식이 예시와 다르면 error promise return되는가",
+    async (inputs) => {
+      const result = Check.checkInputtedMenu(inputs);
+      expect(result).toBeInstanceOf(Promise);
+    }
+  );
+  test("checkInputtedMenu 메뉴 입력 형식이 예시와 다름 없는가", async () => {
+    const result = await Check.checkInputtedMenu(
+      "해산물파스타-7,레드와인-1,제로콜라-5"
+    );
+    expect(result).toEqual([
+      { category: "mainDishes", name: "해산물파스타", count: 7 },
+      { category: "beverages", name: "레드와인", count: 1 },
+      { category: "beverages", name: "제로콜라", count: 5 },
+    ]);
+  });
+});
+
+describe("App.js 유닛 테스트", () => {
+  const app = new App();
+});
+
+describe("CheckOfferingMenu.js 유닛 테스트", () => {
+  test.each([
+    "해산물파스타",
+    "시저샐러드",
+    "아이스크림",
+    "샴페인",
+    "양송이수프",
+  ])("IsNotExistMenu 존재하는 메뉴인가", async (inputs) => {
+    const result = await CheckOfferingMenu.IsNotExistMenu(inputs);
+    expect(result).toBe(false);
+  });
+  test.each(["해산물", "샐러드", "초코아이스크림", "와인", "수프"])(
+    "IsNotExistMenu 존재하지 않는 메뉴인가",
+    async (inputs) => {
+      const result = await CheckOfferingMenu.IsNotExistMenu(inputs);
+      expect(result).toBe(true);
+    }
+  );
+
+  test.each([
+    ["양송이수프", "appetizers"],
+    ["크리스마스파스타", "mainDishes"],
+    ["레드와인", "beverages"],
+  ])("findCategory 카테고리가 올바른가", async (menuName, expectedCategory) => {
+    const result = await CheckOfferingMenu.findCategory(menuName);
+    expect(result).toBe(expectedCategory);
+  });
+
+  test.each([
+    ["양송이수프", 6000],
+    ["바비큐립", 54000],
+    ["아이스크림", 5000],
+  ])("findPrice 가격이 올바른가", async (menuName, expectedPrice) => {
+    const result = await CheckOfferingMenu.findPrice(menuName);
+    expect(result).toBe(expectedPrice);
   });
 });

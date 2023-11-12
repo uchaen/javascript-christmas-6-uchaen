@@ -36,7 +36,7 @@ const OutputView = {
   },
   printBenefit(benefit) {
     MissionUtils.Console.print("\n<혜택 내역>");
-    if (benefit) {
+    if (Object.keys(benefit).length !== 0) {
       for (const item in benefit) {
         MissionUtils.Console.print(
           `${item}: -${benefit[item].toLocaleString("ko-KR")}원`
@@ -61,6 +61,6 @@ const OutputView = {
   printDecemberEventBadge(decemberEventBadge) {
     MissionUtils.Console.print("\n<12월 이벤트 배지>");
     MissionUtils.Console.print(decemberEventBadge);
-  }
+  },
 };
 export default OutputView;
