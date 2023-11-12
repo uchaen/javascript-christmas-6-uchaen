@@ -18,9 +18,9 @@ const CheckOfferingMenu = {
   },
   async findPrice(menuName) {
     for (const category in OfferingMenu) {
-        for (const item of OfferingMenu[category]) {
-            if (item.name === menuName) return item.price; // 찾으면 종료
-          }
+      for (const item of OfferingMenu[category]) {
+        if (item.name === menuName) return item.price; // 찾으면 종료
+      }
     }
   },
 };
